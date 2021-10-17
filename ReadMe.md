@@ -4,7 +4,6 @@
 
 Engine to calculate support/resistance for stocks using KMeans.
 
-Docker not being used at the moment.
 
 
 #### Reference:
