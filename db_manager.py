@@ -9,8 +9,8 @@ env.read_env()
 
 class DBManager:
     def __init__(self):
-        mongo_uri = env("spring.data.mongodb.uri")
-        mongoClient = pymongo.MongoClient(mongo_uri)
+        mongodb_uri = env("mongodb_uri")
+        mongoClient = pymongo.MongoClient(mongodb_uri)
         self.salertdb = mongoClient["salertdb"]
 
     def loadStockHistory(self):
