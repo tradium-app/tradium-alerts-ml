@@ -23,7 +23,7 @@ logging.root.setLevel(logging.NOTSET)
 
 env = Env()
 env.read_env()
-DATABASE_URL = env("spring.data.mongodb.uri")
+DATABASE_URL = env("mongodb_uri")
 
 jobstores = {
     "default": MongoDBJobStore(
