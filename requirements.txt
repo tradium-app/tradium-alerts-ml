@@ -4,6 +4,8 @@ environs==7.1.0
 kneed==0.7.0
 matplotlib==3.1.1
 numpy==1.17.3
+pandas==0.25.1
 pytz==2019.3
 scikit_learn==0.23.1
 yfinance==0.1.63
+fbprophet==0.7.1

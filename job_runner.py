@@ -13,6 +13,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED
 from sr_calculator.sr_calculator import SRCalculator
+from prophet_prediction.prophet_prediction import ProphetPredictor
 from pymongo import MongoClient
 import logging
 
@@ -42,6 +43,13 @@ scheduler.add_job(
     id="sr_calculator",
     func=SRCalculator().calculate,
     trigger=CronTrigger(hour="8-20/4", minute="0", timezone="est"),
+    replace_existing=True,
+)
+
+scheduler.add_job(
+    id="prophet_model_predictor",
+    func=ProphetPredictor().predict,
+    trigger=CronTrigger(hour="21", minute="0", timezone="est"),
     replace_existing=True,
 )
 
