@@ -5,6 +5,7 @@
 __pycache__/
 config.ini
 .pytest_cache
+experiments/time_series_forecaster/
 
 # data files
 data/*
