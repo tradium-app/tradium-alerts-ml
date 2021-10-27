@@ -26,6 +26,8 @@ class ProphetPredictor:
     def buildModelAndRunPredictions(self, stockClosePriceMaps):
         stockPredictions = {}
         for symbol in stockClosePriceMaps:
+            logging.info(f"Build Prophet model for {symbol}.")
+
             model = fbprophet.Prophet(
                 daily_seasonality=False,
                 weekly_seasonality=False,
