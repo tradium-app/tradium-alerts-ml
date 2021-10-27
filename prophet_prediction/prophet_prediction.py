@@ -52,7 +52,7 @@ class ProphetPredictor:
             df = stockPredictions[symbol]
             df.rename(columns={"ds": "time", "yhat": "close"}, inplace=True)
 
-            df[["time"]] = df["time"].apply(lambda x: int(x.timestamp() * 1000))
+            df["time"] = df["time"].apply(lambda x: int(x.timestamp() * 1000))
 
             stockHistoryCol.update_one(
                 {"symbol": symbol},
