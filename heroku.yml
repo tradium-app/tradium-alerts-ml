@@ -2,4 +2,4 @@ build:
   docker:
     worker: Dockerfile
 run:
-  worker: python job_runner.py
+  worker: python3 job_runner.py
