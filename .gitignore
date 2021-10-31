@@ -10,6 +10,11 @@ experiments/time_series_forecaster/
 # data files
 data/*
 !.keep
+*.csv
+**/output/**
+**/import_csv/**
+
+**/log/*
 
 # compiled files
 *.pyc

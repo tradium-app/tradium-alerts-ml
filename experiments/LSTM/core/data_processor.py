@@ -10,6 +10,7 @@ class DataLoader:
 
     def __init__(self, filename, split, cols):
         dataframe = pd.read_csv(filename)
+        dataframe = dataframe.tail(10000)
         i_split = int(len(dataframe) * split)
         self.data_train = dataframe.get(cols).values[:i_split]
         self.data_test = dataframe.get(cols).values[i_split:]

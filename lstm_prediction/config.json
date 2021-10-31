@@ -2,8 +2,8 @@
 	"data": {
 		"filename": "sp500.csv",
 		"columns": [
-			"Close",
-			"Volume"
+			"closePrice",
+			"volume"
 		],
 		"sequence_length": 50,
 		"train_test_split": 0.60,
