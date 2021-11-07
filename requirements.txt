@@ -1,3 +1,4 @@
+numpy==1.17.3
 fbprophet==0.7.1
 pystan==2.19.1.1
 scikit_learn==0.23.1
@@ -7,8 +8,6 @@ APScheduler==3.6.3
 environs==7.1.0
 kneed==0.7.0
 matplotlib==3.1.1
-# numpy==1.17.3
 pytz==2019.3
-autokeras==1.0.10
 alpha_vantage==2.3.1
 nest_asyncio==1.5.1
