@@ -2,9 +2,8 @@
 import sys
 
 sys.path.insert(0, "../")
-import yfinance
 import fbprophet
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 from db_manager import DBManager
 from utilities.mongo_connection import get_db_connection
@@ -14,8 +13,7 @@ logging.root.setLevel(logging.INFO)
 
 class ProphetPredictor:
     def predict(self):
-        symbols = DBManager().loadStockHistory()
-        stockClosePriceMaps = self.loadStockHistory(symbols)
+        stockClosePriceMaps = DBManager().loadStockHistory()
 
         stockPredictions = self.buildModelAndRunPredictions(stockClosePriceMaps)
         self.saveModel(stockPredictions)
@@ -36,7 +34,9 @@ class ProphetPredictor:
                 changepoints=None,
             )
 
-            model.fit(stockClosePriceMaps[symbol])
+            df = stockClosePriceMaps[symbol].filter(['date', 'close'])
+            df.rename(columns={"date": "ds", "close": "y"}, inplace=True)
+            model.fit(df)
 
             future = model.make_future_dataframe(periods=30, freq="D")
             future = model.predict(future)
@@ -58,20 +58,6 @@ class ProphetPredictor:
                 {"symbol": symbol},
                 {"$set": {"model_predictions": df.to_dict("records")}},
             )
-
-    def loadStockHistory(self, symbols):
-        today = datetime.today().strftime("%Y-%m-%d")
-        oneYearAgo = (datetime.today() - timedelta(days=365)).strftime("%Y-%m-%d")
-
-        stockClosePriceMaps = {}
-        for symbol in symbols:
-            df = yfinance.download(symbol, oneYearAgo, today)
-            stock_history = df[["Close"]]
-            stock_history.reset_index(level=0, inplace=True)
-            stock_history.rename(columns={"Date": "ds", "Close": "y"}, inplace=True)
-            stockClosePriceMaps[symbol] = stock_history
-
-        return stockClosePriceMaps
 
 
 if __name__ == "__main__":

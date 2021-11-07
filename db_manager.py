@@ -1,5 +1,6 @@
 # %%
 import numpy as np
+import pandas as pd
 import pymongo
 from environs import Env
 
@@ -34,8 +35,8 @@ class DBManager:
         stockClosePriceMap = {}
 
         for history in stockHistories:
-            result = map(lambda x: x["close"], history["daily_priceHistory"])
-            stockClosePriceMap[history["symbol"]] = list(result)
+            df = pd.DataFrame.from_dict(history["daily_priceHistory"])
+            stockClosePriceMap[history["symbol"]] = df
 
         return stockClosePriceMap
 

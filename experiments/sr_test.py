@@ -5,7 +5,7 @@ from kneed import DataGenerator, KneeLocator
 import yfinance
 
 # %% Read data
-df = yfinance.download("BABA", "2020-05-16", "2021-10-16")
+df = yfinance.download("BABA", "2020-05-16", "2021-11-07")
 X = np.array(df["Close"])
 
 # %%

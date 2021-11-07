@@ -9,13 +9,26 @@ import json
 import time
 import math
 import matplotlib.pyplot as plt
+import pandas as pd
 from core.data_processor import DataLoader
 from core.model import Model
 
 # %%
-# plot functions
+# data analyze
 
-# plot_results(predictions, y_test)
+df = pd.read_csv("../data/full_stock_df.csv")
+aapl = df[df['Name']=='AAPL'].filter(['Date', 'Volume', 'Adj Close'])
+msft = df[df['Name']=='MSFT'].filter(['Date', 'Adj Close']).rename(columns ={"Adj Close": "MSFT"})
+
+aapl = aapl.merge(msft, on='Date', how='outer')
+
+aapl[["Volume"]]
+
+aapl.filter(["Volume","MSFT", "Adj Close"])
+
+
+# %%
+# plot functions
 
 def plot_results(predicted_data, true_data):
     fig = plt.figure(facecolor="white", figsize=(20,15))
@@ -45,8 +58,10 @@ configs = json.load(open("config.json", "r"))
 if not os.path.exists(configs["model"]["save_dir"]):
     os.makedirs(configs["model"]["save_dir"])
 
+# df = pd.read_csv("./data/full_stock_df.csv")
+
 data = DataLoader(
-    os.path.join("../data", "aapl.us.csv"),
+    os.path.join("../data", "full_stock_df.csv"),
     configs["data"]["train_test_split"],
     configs["data"]["columns"],
 )
@@ -58,16 +73,16 @@ x, y = data.get_train_data(
     normalise=configs["data"]["normalise"],
 )
 
-"""
+
 # in-memory training
-model.train(
-    x,
-    y,
-    epochs = configs['training']['epochs'],
-    batch_size = configs['training']['batch_size'],
-    save_dir = configs['model']['save_dir']
-)
-"""
+# model.train(
+#     x,
+#     y,
+#     epochs = configs['training']['epochs'],
+#     batch_size = configs['training']['batch_size'],
+#     save_dir = configs['model']['save_dir']
+# )
+
 # out-of memory generative training
 steps_per_epoch = math.ceil(
     (data.len_train - configs["data"]["sequence_length"])
@@ -98,3 +113,5 @@ predictions = model.predict_sequences_multiple(
 
 plot_results_multiple(predictions, y_test, configs["data"]["sequence_length"])
 
+
+# %%

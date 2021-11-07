@@ -5,15 +5,10 @@
 from concurrent.futures import ThreadPoolExecutor
 import requests
 import asyncio
-
 from datetime import datetime, timedelta
-import time
 import pytz
-
 import pandas as pd
 import logging
-import shutil
-import json
 import io
 import os
 from environs import Env

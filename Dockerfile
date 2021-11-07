@@ -1,5 +1,7 @@
 FROM python:3.8.12-bullseye
 
+# USER root
+
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y git

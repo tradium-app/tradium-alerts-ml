@@ -17,11 +17,22 @@ class SRCalculator:
         stockClosePriceMaps = DBManager().loadStockHistory()
 
         for symbol in stockClosePriceMaps:
-            knees = self.getKnees(stockClosePriceMaps[symbol])
-            minmax = self.getClusterMinMax(stockClosePriceMaps[symbol], knees)
+            close_list = stockClosePriceMaps[symbol]['close'].tolist()
+            knees = self.getKnees(close_list)
+            minmax = self.getClusterMinMax(close_list, knees)
             self.saveSR(symbol, minmax)
 
         logging.info(f"SRCalculator rat at {datetime.now()}.")
+
+    def removeCloseDuplicates(self, sr_list):
+        new_sr_list = []
+        for index, sr in enumerate(sr_list):
+            if(index > 0 and (sr - sr_list[index-1])/sr_list[index-1] < 0.02):
+                new_sr_list.remove(sr_list[index-1])
+                new_sr_list.append((sr + sr_list[index-1])/2)
+            else:
+                new_sr_list.append(sr)
+        return new_sr_list
 
     def saveSR(self, symbol, minmax):
         sr = []
@@ -29,7 +40,8 @@ class SRCalculator:
             sr = np.concatenate((sr, x), axis=0)
 
         sr = np.sort(sr)
-        DBManager().saveSR(symbol, sr.tolist())
+        sr = self.removeCloseDuplicates(sr)
+        DBManager().saveSR(symbol, sr)
 
     def getClusterMinMax(self, X, cluster_no):
         X = np.array(X)

@@ -9,7 +9,15 @@ class DataLoader:
     """A class for loading and transforming data for the lstm model"""
 
     def __init__(self, filename, split, cols):
-        dataframe = pd.read_csv(filename)
+        df = pd.read_csv(filename)
+
+        dataframe = df[df['Name']=='AAPL'].filter(['Date', 'Volume', 'Adj Close'])
+        msft = df[df['Name']=='MSFT'].filter(['Date', 'Adj Close']).rename(columns ={"Adj Close": "MSFT"})
+
+        dataframe = dataframe.merge(msft, on='Date', how='outer')
+        dataframe = dataframe.filter(cols)
+        # print(dataframe)
+
         dataframe = dataframe.tail(10000)
         i_split = int(len(dataframe) * split)
         self.data_train = dataframe.get(cols).values[:i_split]

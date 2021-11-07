@@ -1,6 +1,6 @@
 # %%
 # Make sure that you have all these libaries available to run the code successfully
-from pandas_datareader import data
+# from pandas_datareader import data
 import matplotlib.pyplot as plt
 import pandas as pd
 import datetime as dt
@@ -14,8 +14,9 @@ from sklearn.preprocessing import MinMaxScaler
 # Import data
 
 
-df = pd.read_csv("./data/TSLA.csv")
-df = df.filter(["closePrice"])
+df = pd.read_csv("./data/full_stock_df.csv")
+df = df[df['Name']=='AAPL'].filter(['Volume', 'Close'])
+
 df = df.tail(10000)
 
 df.plot()
