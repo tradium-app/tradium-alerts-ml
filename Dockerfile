@@ -5,7 +5,7 @@ USER root
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y git
-RUN apt-get install python3-pip
+RUN apt-get -y install python3-pip
 
 COPY . /app
 WORKDIR /app
