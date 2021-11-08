@@ -13,6 +13,7 @@ RUN apt-get update && \
 
 RUN pip install --upgrade pip
 
+RUN python3 -m pip install pandas numpy
 RUN python3 -m pip install fbprophet
 
 # RUN pip install fbprophet
