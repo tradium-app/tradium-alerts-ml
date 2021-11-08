@@ -1,13 +1,13 @@
 numpy
 fbprophet==0.7.1
-pystan==2.19.1.1
-scikit_learn==0.23.1
-yfinance==0.1.63
-pymongo==3.12.0
-APScheduler==3.6.3
-environs==7.1.0
-kneed==0.7.0
-matplotlib==3.1.1
-pytz==2019.3
-alpha_vantage==2.3.1
-nest_asyncio==1.5.1
+# pystan==2.19.1.1
+# scikit_learn==0.23.1
+# yfinance==0.1.63
+# pymongo==3.12.0
+# APScheduler==3.6.3
+# environs==7.1.0
+# kneed==0.7.0
+# matplotlib==3.1.1
+# pytz==2019.3
+# alpha_vantage==2.3.1
+# nest_asyncio==1.5.1
