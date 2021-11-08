@@ -13,7 +13,7 @@ RUN apt-get update && \
 
 RUN pip install --upgrade pip
 
-RUN python3 -m pip3 install fbprophet
+RUN python3 -m pip install fbprophet
 
 # RUN pip install fbprophet
 # RUN pip3 install -r requirements.txt
