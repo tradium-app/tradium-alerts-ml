@@ -10,8 +10,8 @@ COPY . /app
 WORKDIR /app
 
 RUN pip install --upgrade pip
-RUN pip install numpy pystan pandas
-RUN pip install fbprophet
+RUN pip install numpy pystan pandas fbprophet
+# RUN pip install fbprophet
 # RUN pip3 install -r requirements.txt
 
 CMD ["python3", "job_runner.py"]
