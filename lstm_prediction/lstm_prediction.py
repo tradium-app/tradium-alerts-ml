@@ -8,8 +8,8 @@ from datetime import datetime
 import logging
 from db_manager import DBManager
 from utilities.mongo_connection import get_db_connection
-from core.data_processor import DataLoader
-from core.model import Model
+from lstm_prediction.core.data_processor import DataLoader
+from lstm_prediction.core.model import Model
 
 logging.root.setLevel(logging.INFO)
 

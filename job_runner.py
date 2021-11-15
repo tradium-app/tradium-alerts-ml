@@ -1,7 +1,8 @@
 # %%
 import sys
 
-sys.path.insert(0, "../")
+sys.path.insert(0, "./")
+# sys.path.append("./lstm_prediction")
 from environs import Env
 import gc
 import time
@@ -29,7 +30,7 @@ DATABASE_URL = env("mongodb_uri")
 
 jobstores = {
     "default": MongoDBJobStore(
-        client=MongoClient(host=[DATABASE_URL]), database="salertdb"
+        client=MongoClient(host=[DATABASE_URL]), database="salertdb", collection="apscheduler_jobs"
     ),
 }
 
