@@ -1,6 +1,7 @@
 # %%
 
 import os
+from statistics import mode
 import sys
 
 # sys.path.insert(0, "core")
@@ -25,32 +26,6 @@ aapl = aapl.merge(msft, on='Date', how='outer')
 aapl[["Volume"]]
 
 aapl.filter(["Volume","MSFT", "Adj Close"])
-
-
-# %%
-# plot functions
-
-def plot_results(predicted_data, true_data):
-    fig = plt.figure(facecolor="white", figsize=(20,15))
-    ax = fig.add_subplot(111)
-    ax.plot(true_data, label="True Data")
-    plt.plot(predicted_data, label="Prediction")
-    plt.legend()
-    plt.show()
-
-
-def plot_results_multiple(predicted_data, true_data, prediction_len):
-    fig = plt.figure(facecolor="white", figsize=(20,15))
-    ax = fig.add_subplot(111)
-    ax.plot(true_data, label="True Data")
-    # Pad the list of predictions to shift it in the graph to it's correct start
-    for i, data in enumerate(predicted_data):
-        padding = [None for p in range(i * prediction_len)]
-        plt.plot(padding + data, label="Prediction")
-        plt.legend()
-    plt.show()
-
-
 
  # %%
 
@@ -105,13 +80,47 @@ x_test, y_test = data.get_test_data(
     normalise=configs["data"]["normalise"],
 )
 
-predictions = model.predict_sequences_multiple(
-    x_test, configs["data"]["sequence_length"], configs["data"]["sequence_length"]
-)
-# predictions = model.predict_sequence_full(x_test, configs['data']['sequence_length'])
-# predictions = model.predict_point_by_point(x_test)
+# %%
+# plot functions
 
-plot_results_multiple(predictions, y_test, configs["data"]["sequence_length"])
+def plot_results(predicted_data, true_data):
+    fig = plt.figure(facecolor="white", figsize=(20,15))
+    ax = fig.add_subplot(111)
+    ax.plot(true_data, label="True Data")
+    plt.plot(predicted_data, label="Prediction")
+    plt.legend()
+    plt.show()
+
+
+def plot_results_multiple(predicted_data, true_data, prediction_len):
+    fig = plt.figure(facecolor="white", figsize=(20,15))
+    ax = fig.add_subplot(111)
+    ax.plot(true_data, label="True Data")
+    # Pad the list of predictions to shift it in the graph to it's correct start
+    for i, data in enumerate(predicted_data):
+        padding = [None for p in range(i * prediction_len)]
+        plt.plot(padding + data, label="Prediction")
+        plt.legend()
+    plt.show()
 
 
 # %%
+
+# predictions = model.predict_sequences_multiple(
+#     x_test, configs["data"]["sequence_length"], configs["data"]["sequence_length"]
+# )
+
+# predictions = model.predict_sequence_full(x_test, configs['data']['sequence_length'])
+# predictions = model.predict_sequence_full(x_test, 50)
+# predictions2 = model.predict_point_by_point(x_test)
+# len(predictions2)
+
+predictions = model.predict_sequence_future(x_test[-1], configs["data"]["sequence_length"], 40)
+
+# predictions = model.predict_point_by_point(x_test)
+
+# plot_results_multiple(predictions, y_test, configs["data"]["sequence_length"])
+# plot_results_multiple(predictions, y_test, 20)
+
+plot_results(predictions, y_test)
+

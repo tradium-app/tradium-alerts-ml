@@ -138,3 +138,14 @@ class Model:
             curr_frame = curr_frame[1:]
             curr_frame = np.insert(curr_frame, [window_size - 2], predicted[-1], axis=0)
         return predicted
+
+    def predict_sequence_future(self, last_data, window_size, future_length):
+        # Shift the window by 1 new prediction each time, re-run predictions on new window
+        print("[Model] Predicting Sequences Full...")
+        curr_frame = last_data
+        predicted = []
+        for i in range(future_length):
+            predicted.append(self.model.predict(curr_frame[newaxis, :, :])[0, 0])
+            curr_frame = curr_frame[1:]
+            curr_frame = np.insert(curr_frame, [window_size - 2], predicted[-1], axis=0)
+        return predicted
