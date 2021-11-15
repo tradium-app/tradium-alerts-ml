@@ -33,41 +33,44 @@ class LstmPredictor:
         for symbol in stockClosePriceMaps:
             logging.info(f"Build LSTM model for {symbol}.")
 
-            data = DataLoader(
-                os.path.join("../data", "full_stock_df.csv"),
-                symbol,
-                configs["data"]["train_test_split"],
-                configs["data"]["columns"],
-            )
+            try:
+                data = DataLoader(
+                    os.path.join("../data", "full_stock_df.csv"),
+                    symbol,
+                    configs["data"]["train_test_split"],
+                    configs["data"]["columns"],
+                )
 
-            model = Model()
-            model.build_model(configs)
-            x, y = data.get_train_data(
-                seq_len=configs["data"]["sequence_length"],
-                normalise=configs["data"]["normalise"],
-            )
-
-            steps_per_epoch = math.ceil(
-                (data.len_train - configs["data"]["sequence_length"])
-                / configs["training"]["batch_size"]
-            )
-            model.train_generator(
-                data_gen=data.generate_train_batch(
+                model = Model()
+                model.build_model(configs)
+                x, y = data.get_train_data(
                     seq_len=configs["data"]["sequence_length"],
-                    batch_size=configs["training"]["batch_size"],
                     normalise=configs["data"]["normalise"],
-                ),
-                epochs=configs["training"]["epochs"],
-                batch_size=configs["training"]["batch_size"],
-                steps_per_epoch=steps_per_epoch,
-                save_dir=configs["model"]["save_dir"],
-            )
+                )
 
-            prediction_input = stockClosePriceMaps[symbol].filter(['volume', 'close']).tail(49).to_numpy()
+                steps_per_epoch = math.ceil(
+                    (data.len_train - configs["data"]["sequence_length"])
+                    / configs["training"]["batch_size"]
+                )
+                model.train_generator(
+                    data_gen=data.generate_train_batch(
+                        seq_len=configs["data"]["sequence_length"],
+                        batch_size=configs["training"]["batch_size"],
+                        normalise=configs["data"]["normalise"],
+                    ),
+                    epochs=configs["training"]["epochs"],
+                    batch_size=configs["training"]["batch_size"],
+                    steps_per_epoch=steps_per_epoch,
+                    save_dir=configs["model"]["save_dir"],
+                )
 
-            predictions = model.predict_sequence_future(prediction_input, configs["data"]["sequence_length"], 40)
+                prediction_input = stockClosePriceMaps[symbol].filter(['volume', 'close']).tail(49).to_numpy()
 
-            stockPredictions[symbol] = predictions
+                predictions = model.predict_sequence_future(prediction_input, configs["data"]["sequence_length"], 40)
+
+                stockPredictions[symbol] = predictions
+            except:
+                pass
 
         return stockPredictions
 
