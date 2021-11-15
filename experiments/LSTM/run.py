@@ -5,7 +5,8 @@ from statistics import mode
 import sys
 
 # sys.path.insert(0, "core")
-sys.path.append("core")
+sys.path.append("../../lstm_prediction")
+
 import json
 import time
 import math

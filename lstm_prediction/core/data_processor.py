@@ -8,15 +8,14 @@ import pandas as pd
 class DataLoader:
     """A class for loading and transforming data for the lstm model"""
 
-    def __init__(self, filename, split, cols):
+    def __init__(self, filename, symbol, split, cols):
         df = pd.read_csv(filename)
 
-        dataframe = df[df['Name']=='AAPL'].filter(['Date', 'Volume', 'Adj Close'])
-        msft = df[df['Name']=='MSFT'].filter(['Date', 'Adj Close']).rename(columns ={"Adj Close": "MSFT"})
+        dataframe = df[df['Name']==symbol].filter(['Date', 'Volume', 'Adj Close'])
+        # msft = df[df['Name']=='MSFT'].filter(['Date', 'Adj Close']).rename(columns ={"Adj Close": "MSFT"})
 
-        dataframe = dataframe.merge(msft, on='Date', how='outer')
+        # dataframe = dataframe.merge(msft, on='Date', how='outer')
         dataframe = dataframe.filter(cols)
-        # print(dataframe)
 
         dataframe = dataframe.tail(10000)
         i_split = int(len(dataframe) * split)
