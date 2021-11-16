@@ -1,6 +1,7 @@
 # %%
 import os
 import sys
+import pandas as pd
 sys.path.insert(0, "../")
 import json
 import math
@@ -16,8 +17,8 @@ logging.root.setLevel(logging.INFO)
 class LstmPredictor:
     def predict(self):
         stockClosePriceMaps = DBManager().loadStockHistory()
-
         stockPredictions = self.buildModelAndRunPredictions(stockClosePriceMaps)
+
         self.saveModel(stockPredictions)
 
         logging.info(f"LstmPredictor rat at {datetime.now()}.")
@@ -26,7 +27,7 @@ class LstmPredictor:
     def buildModelAndRunPredictions(self, stockClosePriceMaps):
         stockPredictions = {}
 
-        configs = json.load(open("config.json", "r"))
+        configs = json.load(open("./config.json", "r"))
         if not os.path.exists(configs["model"]["save_dir"]):
             os.makedirs(configs["model"]["save_dir"])
 
@@ -35,7 +36,7 @@ class LstmPredictor:
 
             try:
                 data = DataLoader(
-                    os.path.join("../data", "full_stock_df.csv"),
+                    os.path.join("../data", "watchlist_df.csv"),
                     symbol,
                     configs["data"]["train_test_split"],
                     configs["data"]["columns"],
@@ -80,9 +81,7 @@ class LstmPredictor:
 
         for symbol in stockPredictions:
             df = stockPredictions[symbol]
-            df.rename(columns={"ds": "time", "yhat": "close"}, inplace=True)
-
-            df["time"] = df["time"].apply(lambda x: int(x.timestamp() * 1000))
+            df = pd.DataFrame(df, columns =['close'])
 
             stockHistoryCol.update_one(
                 {"symbol": symbol},

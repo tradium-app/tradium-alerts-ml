@@ -11,8 +11,10 @@ experiments/time_series_forecaster/
 data/*
 !.keep
 *.csv
+!watchlist_df.csv
 **/output/**
 **/import_csv/**
+
 
 **/log/*
 

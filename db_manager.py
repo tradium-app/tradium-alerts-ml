@@ -14,6 +14,17 @@ class DBManager:
         mongoClient = pymongo.MongoClient(mongodb_uri)
         self.salertdb = mongoClient["salertdb"]
 
+    def getWatchListStocks(self):
+        usersCollection = self.salertdb["users"]
+        users = usersCollection.find({}, {"watchList": 1})
+
+        allStocks = []
+        for x in users:
+            if "watchList" in x:
+                allStocks = np.concatenate((allStocks, x["watchList"]), axis=0)
+
+        return np.unique(allStocks)
+
     def loadStockHistory(self):
         usersCollection = self.salertdb["users"]
         users = usersCollection.find({}, {"watchList": 1})
