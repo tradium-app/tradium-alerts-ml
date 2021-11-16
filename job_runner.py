@@ -1,4 +1,5 @@
 # %%
+from datetime import datetime
 import sys
 
 sys.path.insert(0, "./")
@@ -46,6 +47,7 @@ scheduler.add_job(
     func=SRCalculator().calculate,
     trigger=CronTrigger(hour="8-20/4", minute="0", timezone="est"),
     replace_existing=True,
+    next_run_time=datetime.now()
 )
 
 scheduler.add_job(
@@ -53,6 +55,7 @@ scheduler.add_job(
     func=ProphetPredictor().predict,
     trigger=CronTrigger(hour="21", minute="0", timezone="est"),
     replace_existing=True,
+    next_run_time=datetime.now()
 )
 
 scheduler.add_job(
@@ -60,6 +63,7 @@ scheduler.add_job(
     func=LstmPredictor().predict,
     trigger=CronTrigger(hour="22", minute="0", timezone="est"),
     replace_existing=True,
+    next_run_time=datetime.now()
 )
 
 
