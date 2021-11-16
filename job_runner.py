@@ -80,3 +80,6 @@ scheduler.start()
 while True:
     time.sleep(10)
     gc.collect()
+
+# %%
+LstmPredictor().predict()

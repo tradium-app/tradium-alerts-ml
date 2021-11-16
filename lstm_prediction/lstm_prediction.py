@@ -27,7 +27,8 @@ class LstmPredictor:
     def buildModelAndRunPredictions(self, stockClosePriceMaps):
         stockPredictions = {}
 
-        configs = json.load(open("./config.json", "r"))
+        config_file_path = os.path.join(os.path.dirname(__file__), './config.json')
+        configs = json.load(open(config_file_path, "r"))
         if not os.path.exists(configs["model"]["save_dir"]):
             os.makedirs(configs["model"]["save_dir"])
 
@@ -35,8 +36,10 @@ class LstmPredictor:
             logging.info(f"Build LSTM model for {symbol}.")
 
             try:
+                data_file_path = os.path.join(os.path.dirname(__file__), "../data/watchlist_df.csv")
+                print(data_file_path)
                 data = DataLoader(
-                    os.path.join("../data", "watchlist_df.csv"),
+                    data_file_path,
                     symbol,
                     configs["data"]["train_test_split"],
                     configs["data"]["columns"],
@@ -70,7 +73,8 @@ class LstmPredictor:
                 predictions = model.predict_sequence_future(prediction_input, configs["data"]["sequence_length"], 40)
 
                 stockPredictions[symbol] = predictions
-            except:
+            except Exception as err:
+                print(f"Unexpected {err=}, {type(err)=}")
                 pass
 
         return stockPredictions
