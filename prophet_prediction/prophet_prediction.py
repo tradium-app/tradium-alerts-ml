@@ -2,6 +2,7 @@
 import sys
 
 sys.path.insert(0, "../")
+import pandas as pd
 import fbprophet
 from datetime import datetime
 import logging
@@ -16,6 +17,7 @@ class ProphetPredictor:
         stockClosePriceMaps = DBManager().loadStockHistory()
 
         stockPredictions = self.buildModelAndRunPredictions(stockClosePriceMaps)
+
         self.saveModel(stockPredictions)
 
         logging.info(f"ProphetPredictor rat at {datetime.now()}.")
@@ -34,8 +36,9 @@ class ProphetPredictor:
                 changepoints=None,
             )
 
-            df = stockClosePriceMaps[symbol].filter(['date', 'close'])
-            df.rename(columns={"date": "ds", "close": "y"}, inplace=True)
+            df = stockClosePriceMaps[symbol].filter(['time', 'close'])
+            df["ds"] = pd.to_datetime(df['time'], unit="ms").apply(lambda x: x.date())
+            df.rename(columns={"close": "y"}, inplace=True)
             model.fit(df)
 
             future = model.make_future_dataframe(periods=30, freq="D")

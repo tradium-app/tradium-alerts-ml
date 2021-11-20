@@ -47,10 +47,10 @@ class LstmPredictor:
 
                 model = Model()
                 model.build_model(configs)
-                x, y = data.get_train_data(
-                    seq_len=configs["data"]["sequence_length"],
-                    normalise=configs["data"]["normalise"],
-                )
+                # x, y = data.get_train_data(
+                #     seq_len=configs["data"]["sequence_length"],
+                #     normalise=configs["data"]["normalise"],
+                # )
 
                 steps_per_epoch = math.ceil(
                     (data.len_train - configs["data"]["sequence_length"])
